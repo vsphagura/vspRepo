@@ -1,0 +1,49 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'eclipse-wtp'
+ 
+repositories {
+    mavenLocal()
+    maven { url 'http://maven.springframework.org/release' }
+	maven { url 'http://maven.springframework.org/milestone' }
+	maven { url 'http://maven.springframework.org/snapshot' }
+	maven { url 'http://download.java.net/maven/2' }
+    mavenCentral()
+}
+ 
+dependencies {
+   compile "javax.servlet:javax.servlet-api:$servletApiVersion"
+   compile "org.springframework:spring-webmvc:$springVersion"
+   compile "org.springframework:spring-web:$springVersion"
+   runtime "javax.servlet:jstl:${jstlVersion}"
+   compile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+   compile "ch.qos.logback:logback-classic:${logbackVersion}"
+   compile "org.springframework:spring-orm:$springVersion"
+   compile "org.springframework.data:spring-data-jpa:$springDataJpaVersion"
+   compile "org.hibernate:hibernate-entitymanager:$hibernateEntityManagerVersion"
+   compile "javax.inject:javax.inject:1"
+   compile "org.apache.tomcat:dbcp:$dbcpVersion"
+   compile "org.webjars:angularjs:$angularjsVersion"
+   compile "org.webjars:webjars-locator:$webjarsLocVersion"
+   compile "com.fasterxml.jackson.core:jackson-databind:$jacksone2Version"
+   compile "com.fasterxml.jackson.core:jackson-core:$jacksone2Version"
+   
+   
+}
+
+
+task delWar(type: Delete) {
+  delete 'C:\\apache-tomcat-8.0.14\\webapps\\ContactList.war', 'C:\\apache-tomcat-8.0.14\\webapps\\ContactList'
+}
+
+ task cpWar(type: Copy, dependsOn: [clean, build, delWar]) {
+    from 'build/libs/ContactList.war'
+    into 'C:\\apache-tomcat-8.0.14\\webapps'
+}
+
+build.mustRunAfter clean
+delWar.mustRunAfter build
+cpWar.mustRunAfter delWar
+
+/* Change context path (base url). otherwise defaults to name of project */
+jettyRunWar.contextPath = ''
