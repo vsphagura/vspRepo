@@ -1,0 +1,37 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'eclipse-wtp'
+ 
+repositories {
+    mavenLocal()
+    maven { url 'http://maven.springframework.org/release' }
+	maven { url 'http://maven.springframework.org/milestone' }
+	maven { url 'http://maven.springframework.org/snapshot' }
+	maven { url 'http://download.java.net/maven/2' }
+    mavenCentral()
+}
+ 
+dependencies {
+   compile "javax.servlet:javax.servlet-api:$servletApiVersion"
+   compile "org.springframework:spring-webmvc:$springVersion"
+   runtime "javax.servlet:jstl:${jstlVersion}"
+   compile ("org.slf4j:jcl-over-slf4j:${slf4jVersion}")
+   compile "ch.qos.logback:logback-classic:${logbackVersion}"
+}
+
+task cln(type: Delete) {
+	delete "build"
+	delete "C:\\apache-tomcat-8.0.14\\webapps\\Project1.*"
+}
+
+task delWar(type: Delete) {
+  delete 'C:\\apache-tomcat-8.0.14\\webapps\\Project1.war', 'C:\\apache-tomcat-8.0.14\\webapps\\Project1'
+}
+
+ task cpWar(type: Copy, dependsOn: delWar) {
+    from 'build/libs/Project1.war'
+    into 'C:\\apache-tomcat-8.0.14\\webapps'
+}
+
+/* Change context path (base url). otherwise defaults to name of project */
+jettyRunWar.contextPath = ''
