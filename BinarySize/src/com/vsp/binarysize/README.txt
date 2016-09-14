@@ -5,4 +5,4 @@
 	Created-By: 1.6.0_45 (Sun Microsystems Inc.)
 	Premain-Class: com.vsp.binarysize.ObjectSizeFetcher
 -Run by executing:
-	C:\Users\vphagura\workspace\BinarySize\bin>java -javaagent:agent.jar -cp . com.vsp.binarysize.Tester
+	java -javaagent:agent.jar -cp . com.vsp.binarysize.Tester
